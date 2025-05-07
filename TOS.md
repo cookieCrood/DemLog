@@ -1,3 +1,5 @@
+# Terms of Service for DemLog
+
 ## Introduction
 By using DemLog, you agree to be bound by these Terms of Service. 
 The Bot is provided by the DemLog Devs Team and is intended for use within the Discord platform.
