@@ -1,5 +1,5 @@
 # Privacy Policy for DemLog
-Last Updated: 03.05.2025
+Last Updated: 07.05.2025
 
 ## Introduction
 This Privacy Policy explains how DemLog collects, uses, and stores information from users who 
