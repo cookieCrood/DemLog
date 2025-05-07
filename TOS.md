@@ -1,4 +1,5 @@
 # Terms of Service for DemLog
+Last Updated: 07.05.2025
 
 ## Introduction
 By using DemLog, you agree to be bound by these Terms of Service. 
