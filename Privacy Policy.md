@@ -40,5 +40,5 @@ Continued use of the Bot after changes constitutes acceptance of the revised pol
 ### 6. Contact
 If you have any questions about this Privacy Policy, please contact us at @thecookie__ on Discord or join the Discord Server linked below.
 
-DEMLOG HUB:
+**DEMLOG HUB**:
 http://discord.gg/YGv29Quv7a
