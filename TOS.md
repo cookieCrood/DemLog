@@ -1,12 +1,12 @@
-1. Introduction
+## Introduction
 By using DemLog, you agree to be bound by these Terms of Service. 
 The Bot is provided by the DemLog Devs Team and is intended for use within the Discord platform.
 
-2. Eligibility
+### 1. Eligibility
 You must be at least 13 years old and legally allowed to use Discord in your jurisdiction. 
 By using the Bot, you confirm that you meet these requirements.
 
-3. Usage Rules
+### 2. Usage Rules
 You agree not to misuse the Bot, including but not limited to:
 
  - Engaging in illegal activities
@@ -16,7 +16,7 @@ You agree not to misuse the Bot, including but not limited to:
 
 Use of the Bot must comply with Discord’s Terms of Service and Community Guidelines.
 
-4. Data Collection and Privacy
+### 3. Data Collection and Privacy
 The Bot may collect and store the following data:
 
  - User IDs, Tags, Roles
@@ -29,13 +29,13 @@ The Bot may collect and store the following data:
 We do not collect message content unless explicitly stated. 
 Data is used solely to provide and improve the Bot’s functionality.
 
-5. Availability and Termination
+### 4. Availability and Termination
 We reserve the right to modify, suspend, or terminate the Bot’s services at any time,
 without prior notice. We may also remove access to the Bot from any user or server at our discretion.
 
-6. Disclaimer of Liability
+### 5. Disclaimer of Liability
 The Bot is provided "as is" and "as available" without warranties of any kind. 
 We are not liable for any damages, losses, or disruptions caused by the use or inability to use the Bot.
 
-7. Changes to These Terms
+### 6. Changes to These Terms
 We may update these Terms of Service at any time. Continued use of the Bot after changes are posted constitutes acceptance of the revised Terms.
