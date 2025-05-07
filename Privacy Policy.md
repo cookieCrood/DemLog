@@ -1,11 +1,11 @@
-Privacy Policy for DemLog
+# Privacy Policy for DemLog
 Last Updated: 03.05.2025
 
-1. Introduction
+## Introduction
 This Privacy Policy explains how DemLog collects, uses, and stores information from users who 
 interact with the Bot on Discord. By using the Bot, you agree to the collection and use of information in accordance with this policy.
 
-2. Information We Collect
+### 1. Information We Collect
 The Bot may collect the following information:
 
  - User IDs, Tags, Roles
@@ -16,7 +16,7 @@ The Bot may collect the following information:
 
 The Bot does not collect message content or personal data beyond what is necessary to function.
 
-3. How We Use the Information
+### 2. How We Use the Information
 Collected information is used to:
 
  - Operate and improve the Bot’s features
@@ -25,19 +25,19 @@ Collected information is used to:
 
 We do not sell, rent, or share this information with third parties.
 
-4. Data Retention
+### 3. Data Retention
 We retain collected data only for as long as necessary to fulfill the purposes outlined in this policy.
 Data may be deleted periodically or upon request, where applicable.
 
-5. User Rights
+### 4. User Rights
 If you are a user and wish to request deletion of data collected by the Bot (e.g., your User ID or command logs), 
 you may contact us at @thecookie__ on Discord or join the Discord Server linked below.
 
-6. Changes to This Policy
+### 5. Changes to This Policy
 We may update this Privacy Policy from time to time. Changes will be posted in the DemLog Hub on Discord.
 Continued use of the Bot after changes constitutes acceptance of the revised policy.
 
-7. Contact
+### 6. Contact
 If you have any questions about this Privacy Policy, please contact us at @thecookie__ on Discord or join the Discord Server linked below.
 
 DEMLOG HUB:
