@@ -1,0 +1,6 @@
+config.json
+package-lock.json
+node_modules/
+archive/
+commands/moderation/logs
+.DS_Store
