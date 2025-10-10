@@ -1,14 +1,13 @@
-const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const fs = require('fs')
 
-const { MessageFlags, ButtonStyle } = require('discord-api-types/v10');
-const { checkPrimeSync } = require("crypto");
+const { MessageFlags } = require('discord-api-types/v10');
 const ResponseBuilder = require("../../util/ResponseBuilder");
 const ephemeral = MessageFlags.Ephemeral
 
 async function checkDem(interaction, player, client) {
 
-    interaction.editReply({ content:`Getting UUID of \`${player}\`` })
+    interaction.editReply({ embeds: [ResponseBuilder.getUUID(player)] })
     const UUID = await client.getUUID(player)
 
     if (!UUID) {
@@ -18,10 +17,10 @@ async function checkDem(interaction, player, client) {
     const punishments = await client.db.getGuildPunishments(UUID, interaction.guild.id)
 
     if (punishments === null) {
-        return interaction.editReply({ embeds: [ResponseBuilder.error(`Couldn't find any punishments for \`${player}\` (check for typos and try with other names they had: [NameMC](https://namemc.com/profile/${player}))`)] })
+        return interaction.editReply({ embeds: [ResponseBuilder.error(`Couldn't find any punishments for \`${player}\` (check for typos!)`)] })
     }
 
-    interaction.editReply({ embeds: [ResponseBuilder.listPunishments(player, punishments)] })
+    interaction.editReply({ content: '', embeds: [ResponseBuilder.listPunishments(player, punishments)] })
 
 }
 
@@ -44,13 +43,4 @@ module.exports = {
         checkDem(interaction, player, stuff.client)
         
     },
-
-    async buttons(stuff) {
-        const interaction = stuff.interaction
-        await interaction.deferReply({ flags:ephemeral })
-        const args = interaction.customId.split(':')
-
-        checkDem(interaction, args[1], stuff.client)
-        
-    }
 }

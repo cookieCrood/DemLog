@@ -5,21 +5,15 @@ async function getPunishments(client, player) {
     const UUID = await client.getUUID(player)
     if (!UUID) return { error: 'Player not found' }
 
-    const globalLog = client.logs['global-log']
     let logs = {} // { "guild.name": { "demoted":"reason" } }
 
-    Object.keys(globalLog).forEach((key) => {
-        if (key.includes(UUID)) {
-            const entry = globalLog[key]
-            let stuff = {}
-            let guildName = ''
-            for (const type in entry) {
-                if (type != 'temporaries') {
-                    guildName = entry[type].guild.name
-                    stuff[type] = entry[type].reason
-                }
-            }
-            logs[guildName] = stuff
+    const punishments = await client.db.getPunishments(UUID)
+
+    punishments.forEach((p) => {
+        if (!logs[p.guild]) {
+            logs[p.guild] = [ [ p.punishment, p.reason ] ]
+        } else {
+            logs[p.guild].push( [ p.punishment, p.reason ] )
         }
     })
 
@@ -59,44 +53,8 @@ async function getBulkUUIDs(usernames, options = { delay: 200 }) {
     return results;
 }
 
-
-async function getTabSummary(client, tab) {
-    const globalLog = client.logs['global-log']
-    const uuidList = await getBulkUUIDs(tab)
-    const response = {}
-    for (const name in uuidList) {
-        const e = uuidList[name]
-        if (!e) {
-            response[name] = { IS_PLAYER_NICKED: true }
-            continue
-        }
-        const UUID = (e || {id:"NO_ID_FOUND"}).id.replaceAll('-', '')
-        Object.keys(globalLog).forEach((key) => {
-            if (key.includes(UUID)) {
-                const entry = globalLog[key]
-                let stuff = {}
-                let guild = ''
-                let guildName = ''
-                for (const type in entry) {
-                    if (type != 'temporaries') {
-                        guild = entry[type].guild.id
-                        guildName = entry[type].guild.name
-                        stuff[type] = entry[type].reason
-                    }
-                }
-                if (!response[e.name]) response[e.name] = {}
-                stuff.guildName = guildName
-                response[e.name][guild] = stuff
-            }
-        })
-        if (JSON.stringify(response[e.name]) === '{"":{"guildName":""}}') delete response[e.name]
-    }
-    return response
-}
-
 module.exports = {
-    getPunishments,
-    getTabSummary
+    getPunishments
 }
 
 

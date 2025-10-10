@@ -55,6 +55,26 @@ class DBClient {
         }
     }
 
+    async getPunishments(uuid) {
+        return this.executeSafely(async () => {
+            const punishments = (await this.run(`
+                SELECT *
+                FROM Log
+                WHERE uuid = ?
+            `,
+                [
+                    uuid,
+                ]
+            )).rows
+
+            if (punishments.length === 0) {
+                return null
+            }
+
+            return punishments
+        })
+    }
+
     async getGuildPunishments(uuid, guild) {
         return this.executeSafely(async () => {
             const punishments = (await this.run(`
@@ -77,14 +97,14 @@ class DBClient {
         })
     }
 
-    async addGuildPunishment(uuid, username, punishment, reason, loggedId, loggedName, guild) {
+    async addGuildPunishment(uuid, username, punishment, reason, loggedId, loggedName, guild, messageId, globalMessageId, date) {
         return this.executeSafely(async () => {
             const newPunishment = await this.run(`
-                INSERT INTO Log (uuid, username, punishment, reason, loggedId, loggedName, guild)
-                     VALUES     (?, ?, ?, ?, ?, ?, ?);
+                INSERT INTO Log (uuid, username, punishment, reason, loggedId, loggedName, guild, messageId, globalMessageId, date)
+                     VALUES     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             `,
                 [
-                    uuid, username, punishment, reason, loggedId, loggedName, guild
+                    uuid, username, punishment, reason, loggedId, loggedName, guild, messageId, globalMessageId, date
                 ]
             )
 
@@ -92,7 +112,28 @@ class DBClient {
         })
     }
 
-    async removeGuildPunishment(guild, id) {
+    async getPunishmentById(id) {
+        return this.executeSafely(async () => {
+            const punishment = (await this.run(`
+                SELECT *
+                  FROM Log
+                 WHERE id = ?
+            `,
+                [
+                    id
+                ]
+            )).rows
+
+            if (punishment.length == 0) {
+                return null
+            }
+
+
+            return punishment[0]
+        })
+    }
+
+    async deleteGuildPunishment(guild, id) {
         return this.executeSafely(async () => {
             const removedPunishment = await this.run(`
                 DELETE FROM Log
@@ -104,6 +145,8 @@ class DBClient {
                     id
                 ]
             )
+
+            return removedPunishment
         })
     }
 
@@ -299,6 +342,20 @@ class DBClient {
             )
 
             return res.rows.length === 1
+        })
+    }
+
+    async leaderboard() {
+        return this.executeSafely(async () => {
+            const leaderboard = await this.run(`
+                SELECT COUNT(*) as total, guild as id
+                  FROM Log
+                 GROUP BY guild
+            `,
+            [
+            ])
+
+            return leaderboard.rows
         })
     }
 }

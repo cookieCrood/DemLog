@@ -63,8 +63,7 @@ module.exports = {
                     .setRequired(true))),
 
     async execute(stuff) {
-        const interaction = stuff.interaction
-        const client = stuff.client
+        const { interaction, client } = stuff
 
         await interaction.deferReply({ flags:ephemeral })
 
@@ -90,19 +89,21 @@ module.exports = {
                     const reason = interaction.options.getString('reason')
                     const punishment = interaction.options.getString('punishment') || DBClient.PunishmentTypes.DEMOTION
 
-                    interaction.editReply({ content:`Getting UUID of \`${player}\`` })
+                    interaction.editReply({ embeds: [ResponseBuilder.getUUID(player)] })
                     const UUID = await client.getUUID(player)
 
                     if (!UUID) {
                         return interaction.editReply({ embeds: [ResponseBuilder.error(`This player does not exist! Demotion not logged. (\`${player}\` is probably a nick)`)] })
                     }
 
-                    const logPunishment = await client.db.addGuildPunishment(UUID, player, punishment, reason, interaction.user.id, interaction.user.username, interaction.guild.id)
-
                     const [message, globalMessage] = await Promise.all([
                         channel.send({ embeds: [ResponseBuilder.localPunishment(punishment, player, reason, interaction)] }),
                         client.globalChannel.send({ embeds: [ResponseBuilder.globalPunishment(punishment, player, reason, interaction)] })
                     ])
+
+                    const date = Date.now()
+
+                    const logPunishment = await client.db.addGuildPunishment(UUID, player, punishment, reason, interaction.user.id, interaction.user.username, interaction.guild.id, message.id, globalMessage.id, date)
 
                     interaction.editReply({ embeds: [ResponseBuilder.success(`Logged the punishment of \`${player}\` successfully`)] })
 
@@ -113,79 +114,59 @@ module.exports = {
             
             case 'delete': {
 
-                    if (!client.hasPermission(interaction, 'delete')) {
+                    if (!client.hasPermission(interaction, DBClient.Roles.DELETE)) {
                         return interaction.editReply({ embeds: [ResponseBuilder('You do not have permission to use this command')] })
                     }
                     
-                    const deletePunishment = interaction.options.getString('punishment')
-
-                    interaction.editReply({ content:`Getting UUID of \`${player}\`` })
+                    interaction.editReply({ embeds: [ResponseBuilder.getUUID(player)] })
                     const UUID = await client.getUUID(player)
 
                     if (!UUID) {
                         return interaction.editReply({ embeds: [ResponseBuilder('This player does not exist! If you think this is a mistake, contact **thecookie__** on Discord.')] })
                     }
 
-                    if (!log[UUID]) {
-                        return interaction.editReply({ embeds: [ResponseBuilder(`There is no log for \`${player}\``)] })
+                    const punishments = await client.db.getGuildPunishments(UUID, interaction.guild.id)
+                    if (!punishments) {
+                        return interaction.editReply({ embeds: [ResponseBuilder.error(`Couldn't find any punishments for \`${player}\` (check for typos!)`)] })
                     }
 
-                    if (!log[UUID][deletePunishment] && deletePunishment != 'all') {
-                        return interaction.editReply({ embeds: [ReportingObserver(`This player doesn't have a log for being ${deletePunishment}`)] })
-                    }
+                    const { embed, row} = ResponseBuilder.listDeletePunishments(player, punishments)
 
-                    const entry = log[UUID]
-
-                    if (deletePunishment == 'all') {
-                        for (const thing in entry) {
-
-                            const deleteChannel = stuff.client.channels.cache.get(entry[thing].channelId)
-                            if (deleteChannel) {
-                                deleteChannel.messages.delete(entry[thing].messageId)
-                            }
-
-                            const globalEntry = globalLog[`${UUID}-${interaction.guild.id}`]
-                            stuff.client.channels.cache.get('1373319736523358278').messages.delete(globalEntry[thing].messageId)
-
-                        }
-                        delete log[UUID]
-                        delete globalLog[`${UUID}-${interaction.guild.id}`]
-
-                    } else {
-
-                        const deleteChannel = stuff.client.channels.cache.get(entry[deletePunishment].channelId)
-                        if (deleteChannel) {
-                            deleteChannel.messages.delete(entry[deletePunishment].messageId)
-                        }
-
-                        const globalEntry = globalLog[`${UUID}-${interaction.guild.id}`]
-                        stuff.client.channels.cache.get('1373319736523358278').messages.delete(globalEntry[deletePunishment].messageId)
-
-                        delete log[UUID][deletePunishment]
-
-                        if (isEmpty(log[UUID])) {
-                            delete log[UUID]
-                            delete globalLog[`${UUID}-${interaction.guild.id}`]
-                        }
-                    }
-
-                    let totalDemotions = 0
-                    for (const log in globalLog) {
-                        if (globalLog.hasOwnProperty(log)) {
-                            totalDemotions++
-                        }
-                    }
-
-                    stuff.client.channels.cache.get('1365334036876365865').setName(`🚫︱ᴅᴇᴍᴏᴛɪᴏɴs: ${totalDemotions}`)
-
-                    close(log)
-                    fs.writeFile(globalLogPath, JSON.stringify(globalLog), (err) => {
-                        if (err) console.error('Error writing to global log file:', err)
-                    })
-
-                    return interaction.editReply({ content:`:white_check_mark: Deleted the log for \`${player}\` successfully` })
-
+                    interaction.editReply({ content: '', embeds: [embed], components: [row] })
             }
         }
+    },
+
+    async buttons(stuff) {
+        const { interaction, client } = stuff
+        await interaction.deferReply({ flags: ephemeral })
+
+        const args = interaction.customId.split(':')
+        const id = args[2]
+
+        const log = await client.db.getPunishmentById(id)
+        if (!log) return interaction.editReply({ embeds: [ResponseBuilder.error()] })
+
+        const { messageId, globalMessageId } = log
+
+        try {
+            const logChannel = client.channels.cache.get(
+                await client.db.getLogChannel(interaction.guild.id)
+            )
+
+            await Promise.all([
+                client.globalChannel.messages.delete(globalMessageId),
+                logChannel.messages.delete(messageId)
+            ])
+
+        } catch(e) {
+            console.log(e)
+        }
+
+        await client.db.deleteGuildPunishment(interaction.guild.id, id)
+
+        interaction.editReply({ embeds: [ResponseBuilder.success(`Deleted punishment #${id} successfully!`)] })
+
+        stuff.client.channels.cache.get('1365334036876365865').setName(`🚫│ʟᴏɢs: ${await client.db.countTotalLogs()}`)
     }
 }

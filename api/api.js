@@ -14,12 +14,6 @@ module.exports = function startApi(client) {
         res.json(punishments);
     });
 
-    app.post('/bot/tab', async (req, res) => {
-        const body = req.body || { players: [] };        
-        const summary = await getTabSummary(client, body.players);
-        res.json(summary);
-    });
-
     app.listen(port, '0.0.0.0', () => {
         console.log(`🌐 API running at http://localhost:${port}`);
     });
