@@ -84,7 +84,7 @@ class ResponseBuilder {
                 'MUTE': ':mute:',
                 'BAN': ':bangbang:'
             }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
-                value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)\nat \`${p.date ? new Date(p.date).toLocaleString("de-DE", { timeZone: "Europe/Berlin" }) : "No date :thinking:}\``
+                value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)\nat \`${p.date ? new Date(p.date).toLocaleString("de-DE", { timeZone: "Europe/Berlin" }) : "No date :thinking:"}\``
             })
         }
 
