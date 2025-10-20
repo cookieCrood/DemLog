@@ -24,7 +24,8 @@ class DBClient {
     static PunishmentTypes = Object.freeze({
         DEMOTION: "DEMOTION",
         MUTE: "MUTE",
-        BAN: "BAN"
+        BAN: "BAN",
+        WARN: "WARN"
     })
 
     constructor () {

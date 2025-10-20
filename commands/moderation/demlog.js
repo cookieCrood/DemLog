@@ -46,8 +46,10 @@ module.exports = {
                         .setName('punishment')
                         .setDescription('OPTIONAL Provide a punishment type that is not a demotion')
                         .addChoices([
+                            { name:'warn', value: DBClient.PunishmentTypes.WARN },
                             { name:'mute', value: DBClient.PunishmentTypes.MUTE },
                             { name:'ban', value: DBClient.PunishmentTypes.BAN }
+                            
                         ])))
         
         

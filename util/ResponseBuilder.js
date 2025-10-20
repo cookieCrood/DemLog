@@ -26,11 +26,13 @@ class ResponseBuilder {
         return new EmbedBuilder()
             .setTitle(`${{
                 'DEMOTION': ':no_entry_sign:',
+                'WARN': ':warning:',
                 'MUTE': ':mute:',
                 'BAN': ':bangbang:'
             }[type]} ${type} of \`${player}\``)
             .setColor({
                 'DEMOTION': 'Yellow',
+                'WARN': 'Yellow',
                 'MUTE': 'Orange',
                 'BAN': 'Red'
             }[type])
@@ -50,11 +52,13 @@ class ResponseBuilder {
         return new EmbedBuilder()
             .setTitle(`${{
                 'DEMOTION': ':no_entry_sign:',
+                'WARN': ':warning:',
                 'MUTE': ':mute:',
                 'BAN': ':bangbang:'
             }[type]} ${type} of \`${player}\` in **${interaction.guild.name}**`)
             .setColor({
                 'DEMOTION': 'Yellow',
+                'WARN': 'Yellow',
                 'MUTE': 'Orange',
                 'BAN': 'Red'
             }[type])
@@ -81,6 +85,7 @@ class ResponseBuilder {
             fields.push({
                 name: `${{
                 'DEMOTION': ':no_entry_sign:',
+                'WARN': ':warning:',
                 'MUTE': ':mute:',
                 'BAN': ':bangbang:'
             }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
@@ -106,6 +111,7 @@ class ResponseBuilder {
             fields.push({
                 name: `(#${p.id}) ${{
                     'DEMOTION': ':no_entry_sign:',
+                    'WARN': ':warning:',
                     'MUTE': ':mute:',
                     'BAN': ':bangbang:'
                     }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
@@ -118,6 +124,7 @@ class ResponseBuilder {
                     .setEmoji({
                         name: {
                             'DEMOTION': '🚫',
+                            'WARN': '⚠️',
                             'MUTE': '🔇',
                             'BAN': '‼️'
                         }[p.punishment]
