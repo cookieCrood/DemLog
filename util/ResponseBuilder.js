@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js')
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Embed } = require('discord.js')
 
 class ResponseBuilder {
 
@@ -28,13 +28,15 @@ class ResponseBuilder {
                 'DEMOTION': ':no_entry_sign:',
                 'WARN': ':warning:',
                 'MUTE': ':mute:',
-                'BAN': ':bangbang:'
+                'BAN': ':bangbang:',
+                'NOTE': ':scroll:'
             }[type]} ${type} of \`${player}\``)
             .setColor({
                 'DEMOTION': 'Yellow',
                 'WARN': 'Yellow',
                 'MUTE': 'Orange',
-                'BAN': 'Red'
+                'BAN': 'Red',
+                'NOTE': 'White'
             }[type])
             .addFields([
                 {
@@ -54,13 +56,15 @@ class ResponseBuilder {
                 'DEMOTION': ':no_entry_sign:',
                 'WARN': ':warning:',
                 'MUTE': ':mute:',
-                'BAN': ':bangbang:'
+                'BAN': ':bangbang:',
+                'NOTE': ':scroll:'
             }[type]} ${type} of \`${player}\` in **${interaction.guild.name}**`)
             .setColor({
                 'DEMOTION': 'Yellow',
                 'WARN': 'Yellow',
                 'MUTE': 'Orange',
-                'BAN': 'Red'
+                'BAN': 'Red',
+                'NOTE': 'White'
             }[type])
             .addFields([
                 {
@@ -87,7 +91,8 @@ class ResponseBuilder {
                 'DEMOTION': ':no_entry_sign:',
                 'WARN': ':warning:',
                 'MUTE': ':mute:',
-                'BAN': ':bangbang:'
+                'BAN': ':bangbang:',
+                'NOTE': ':scroll:'
             }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
                 value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)\nat \`${p.date ? new Date(p.date).toLocaleString("de-DE", { timeZone: "Europe/Berlin" }) : "No date :/"}\``
             })
@@ -113,7 +118,8 @@ class ResponseBuilder {
                     'DEMOTION': ':no_entry_sign:',
                     'WARN': ':warning:',
                     'MUTE': ':mute:',
-                    'BAN': ':bangbang:'
+                    'BAN': ':bangbang:',
+                    'NOTE': ':scroll:'
                     }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
                 value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)`
             })
@@ -126,7 +132,8 @@ class ResponseBuilder {
                             'DEMOTION': '🚫',
                             'WARN': '⚠️',
                             'MUTE': '🔇',
-                            'BAN': '‼️'
+                            'BAN': '‼️',
+                            'NOTE': '📜'
                         }[p.punishment]
                     })
 
@@ -139,6 +146,29 @@ class ResponseBuilder {
         row.addComponents(buttons)
 
         return { embed, row }
+    }
+
+    static makeLeaderboard(data) {
+        const embed = new EmbedBuilder()
+            .setTitle('Log leaderboard')
+            .setDescription('List of top punishment loggers')
+            .setColor('Green')
+        
+        const fields = [
+            { name: 'User', value: '', inline: true },
+            { name: 'Logs', value: '', inline: true }
+        ]
+
+        console.log(data)
+        
+        for (const d of data) {
+            fields[0].value += `<@${d.id}>\n`
+            fields[1].value += `${d.count}\n`
+        }
+
+        embed.addFields(fields)
+
+        return embed
     }
 }
 

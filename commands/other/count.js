@@ -1,5 +1,6 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { MessageFlags } = require('discord-api-types/v10');
+const ResponseBuilder = require("../../util/ResponseBuilder");
 
 const ephemeral = MessageFlags.Ephemeral
 
@@ -51,13 +52,21 @@ module.exports = {
 
         switch(interaction.options.getSubcommand()) {
             case 'total':
-                return interaction.reply({ content: `:scroll: Total demotions in this server: **${await client.db.countGuild(interaction.guild.id)}**`, flags:ephemeral })
+                return interaction.reply({ content: `:scroll: Total logs in this server: **${await client.db.countGuild(interaction.guild.id)}**`, flags:ephemeral })
             case 'user':
-                return
-                // TODO
+                const user = interaction.options.getUser('user')
+                return interaction.reply({ content: `:scroll: Total logs of <@${user.id}>: **${await client.db.getUserLogsInGuild(user.id, interaction.guild.id)}**`,  flags:ephemeral })
             case 'leaderboard':
-                return 
-                // TODO
+                const guild = interaction.guild.id
+                const max = interaction.options.getNumber('display')
+
+                const leaderboard = await client.db.getGuildLeaderboard(guild, max)
+
+                return interaction.reply({
+                    embeds: [
+                        ResponseBuilder.makeLeaderboard(leaderboard)
+                    ]
+                })
         }
     }
 }

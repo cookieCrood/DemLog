@@ -30,13 +30,13 @@ module.exports = {
         }]
 
         try {
-                for (const guild of data) {
-                const got = await client.guilds.cache.get(guild.id)
-                if (!got) {
-                    continue
-                }
-                fields[0].value += got.name + '\n'
-                fields[1].value += guild.total + '\n'
+            for (const guild of data) {
+            const got = await client.guilds.cache.get(guild.id)
+            if (!got) {
+                continue
+            }
+            fields[0].value += got.name + '\n'
+            fields[1].value += guild.total + '\n'
             }
         } catch(e) {
             console.log(e)

@@ -25,7 +25,8 @@ class DBClient {
         DEMOTION: "DEMOTION",
         MUTE: "MUTE",
         BAN: "BAN",
-        WARN: "WARN"
+        WARN: "WARN",
+        NOTE: "NOTE"
     })
 
     constructor () {
@@ -354,6 +355,51 @@ class DBClient {
                  GROUP BY guild
             `,
             [
+            ])
+
+            return leaderboard.rows
+        })
+    }
+
+    async countGuild(guild) {
+        return this.executeSafely(async () => {
+            const amount = await this.run(`
+                SELECT COUNT(*) AS amount
+                  FROM Log
+                 WHERE guild = ?
+            `, [
+                guild
+            ])
+        })
+    }
+
+    async getUserLogsInGuild(user, guild) {
+        return this.executeSafely(async () => {
+            const amount = await this.run(`
+                SELECT COUNT(*) AS amount
+                  FROM Log
+                 WHERE loggedId = ?
+                   AND guild = ?
+            `, [
+                user,
+                guild
+            ])
+
+            return amount.rows[0].amount
+        })
+    }
+
+    async getGuildLeaderboard(guild, max) {
+        return this.executeSafely(async () => {
+            const leaderboard = await this.run(`
+                SELECT COUNT(*) AS count, loggedId AS id
+                  FROM Log
+                 WHERE guild = ?
+                GROUP BY loggedId
+                 LIMIT ?
+            `, [
+                guild,
+                max
             ])
 
             return leaderboard.rows

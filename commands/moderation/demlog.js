@@ -48,8 +48,8 @@ module.exports = {
                         .addChoices([
                             { name:'warn', value: DBClient.PunishmentTypes.WARN },
                             { name:'mute', value: DBClient.PunishmentTypes.MUTE },
-                            { name:'ban', value: DBClient.PunishmentTypes.BAN }
-                            
+                            { name:'ban', value: DBClient.PunishmentTypes.BAN },
+                            { name: 'note', value: DBClient.PunishmentTypes.NOTE }
                         ])))
         
         
