@@ -2,6 +2,22 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Embed } = re
 
 class ResponseBuilder {
 
+    static EMOJI_MAP = {
+        'DEMOTION': ':no_entry_sign:',
+        'WARN': ':warning:',
+        'MUTE': ':mute:',
+        'BAN': ':bangbang:',
+        'NOTE': ':scroll:'
+    }
+
+    static COLOR_MAP = {
+        'DEMOTION': 'Yellow',
+        'WARN': 'Yellow',
+        'MUTE': 'Orange',
+        'BAN': 'Red',
+        'NOTE': 'White'
+    }
+
     static success(message) {
         return new EmbedBuilder()
             .setTitle(':white_check_mark: Success')
@@ -24,20 +40,8 @@ class ResponseBuilder {
 
     static localPunishment(type, player, reason, interaction) {
         return new EmbedBuilder()
-            .setTitle(`${{
-                'DEMOTION': ':no_entry_sign:',
-                'WARN': ':warning:',
-                'MUTE': ':mute:',
-                'BAN': ':bangbang:',
-                'NOTE': ':scroll:'
-            }[type]} ${type} of \`${player}\``)
-            .setColor({
-                'DEMOTION': 'Yellow',
-                'WARN': 'Yellow',
-                'MUTE': 'Orange',
-                'BAN': 'Red',
-                'NOTE': 'White'
-            }[type])
+            .setTitle(`${this.EMOJI_MAP[type]} ${type} of \`${player}\``)
+            .setColor(this.COLOR_MAP[type])
             .addFields([
                 {
                     name: 'Reason',
@@ -52,20 +56,8 @@ class ResponseBuilder {
 
     static globalPunishment(type, player, reason, interaction) {
         return new EmbedBuilder()
-            .setTitle(`${{
-                'DEMOTION': ':no_entry_sign:',
-                'WARN': ':warning:',
-                'MUTE': ':mute:',
-                'BAN': ':bangbang:',
-                'NOTE': ':scroll:'
-            }[type]} ${type} of \`${player}\` in **${interaction.guild.name}**`)
-            .setColor({
-                'DEMOTION': 'Yellow',
-                'WARN': 'Yellow',
-                'MUTE': 'Orange',
-                'BAN': 'Red',
-                'NOTE': 'White'
-            }[type])
+            .setTitle(`${this.EMOJI_MAP[type]} ${type} of \`${player}\` in **${interaction.guild.name}**`)
+            .setColor(this.COLOR_MAP[type])
             .addFields([
                 {
                     name: 'Reason',
@@ -87,14 +79,8 @@ class ResponseBuilder {
         
         for (const p of punishments) {
             fields.push({
-                name: `${{
-                'DEMOTION': ':no_entry_sign:',
-                'WARN': ':warning:',
-                'MUTE': ':mute:',
-                'BAN': ':bangbang:',
-                'NOTE': ':scroll:'
-            }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
-                value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)\nat \`${p.date ? new Date(p.date).toLocaleString("de-DE", { timeZone: "Europe/Berlin" }) : "No date :/"}\``
+                name: `${this.EMOJI_MAP[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
+                value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)\nat ${p.date ? `<t:${Math.floor(p.date / 1_000)}:f>` : "`No date :/`"}`
             })
         }
 
@@ -114,14 +100,8 @@ class ResponseBuilder {
 
         for (const p of punishments) {
             fields.push({
-                name: `(#${p.id}) ${{
-                    'DEMOTION': ':no_entry_sign:',
-                    'WARN': ':warning:',
-                    'MUTE': ':mute:',
-                    'BAN': ':bangbang:',
-                    'NOTE': ':scroll:'
-                    }[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
-                value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)`
+                name: `(#${p.id}) ${this.EMOJI_MAP[p.punishment]} __**${p.punishment}**__ as \`${p.username}\``,
+                value: `for "**${p.reason}**"\nby <@${p.loggedId}> (\`${p.loggedName}\`)\nat ${p.date ? `<t:${Math.floor(p.date / 1_000)}:f>` : "`No date :/`"}`
             })
 
             buttons.push(

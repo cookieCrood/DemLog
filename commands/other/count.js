@@ -65,7 +65,7 @@ module.exports = {
                 return interaction.reply({
                     embeds: [
                         ResponseBuilder.makeLeaderboard(leaderboard)
-                    ]
+                    ], flags:ephemeral
                 })
         }
     }

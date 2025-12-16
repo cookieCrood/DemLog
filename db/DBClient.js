@@ -395,7 +395,8 @@ class DBClient {
                 SELECT COUNT(*) AS count, loggedId AS id
                   FROM Log
                  WHERE guild = ?
-                GROUP BY loggedId
+                 GROUP BY loggedId
+                 ORDER BY count DESC
                  LIMIT ?
             `, [
                 guild,
