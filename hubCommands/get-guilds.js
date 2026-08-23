@@ -49,10 +49,6 @@ module.exports = {
             return interaction.reply({ content: ':x: You do not have permission to execute this command!', flags:ephemeral })
         }
 
-        getGuilds(stuff.client)
-
         interaction.reply({ embeds:[getGuilds(stuff.client)], flags:ephemeral})
-
-
     }
 }

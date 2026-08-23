@@ -6,6 +6,8 @@ const DBClient = require('./db/DBClient')
 const { MessageFlags, ButtonStyle } = require('discord-api-types/v10');
 const ephemeral = MessageFlags.Ephemeral
 
+require('./deploy-commands')
+
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
